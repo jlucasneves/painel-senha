@@ -1,0 +1,9 @@
+# Dependências do Node
+/node_modules
+
+# Arquivos de log
+npm-debug.log*
+*.log
+
+# Variáveis de ambiente
+.env

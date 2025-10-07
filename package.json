@@ -1,0 +1,13 @@
+{
+  "name": "painel-senha",
+  "version": "1.0.0",
+  "description": "Painel de Senha",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}
