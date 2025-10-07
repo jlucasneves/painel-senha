@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel de Senhas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #1E2B78;
+      color: #fff;
+      text-align: center;
+      padding-top: 60px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .logo {
+      max-height: 120px;
+      margin-bottom: 30px;
+    }
+    .titulo-senha {
+      font-size: 60px;
+      font-weight: bold;
+      color: #1E2B78;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+    .senha {
+      font-size: 160px;
+      font-weight: bold;
+      letter-spacing: 8px;
+    }
+    .subtitulo {
+      margin-top: 30px;
+      font-size: 20px;
+      background-color: #1E2B78;
+      color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+
+  @keyframes piscar {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .blink {
+    animation: piscar 0.5s ease-in-out 3;
+  }
+
+
+  </style>
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100">
+
+  <!-- LOGO -->
+  <img src="logo-indea.png" alt="Logo INDEA" class="logo">
+
+  
+  <!-- CARD -->
+  <div class="card shadow-lg p-4 text-center" style="max-width: 500px; width: 100%;">
+
+    <!-- TÍTULO -->
+    <div class="titulo-senha">SENHA:</div>
+
+    <!-- SENHA -->
+    <div class="senha" id="senha">---</div>
+
+    <!-- LEMBRETE -->
+    <div class="subtitulo">⚠️ RETIRE SUA SENHA E AGUARDE SER CHAMADO! ⚠️</div>
+
+    <!-- SOM -->
+    <audio id="painelSound" src="audioSenha.mp3" preload="auto"></audio>
+    <audio id="audioRepetir" src="audioRepetir.mp3" preload="auto"></audio>
+
+    <!-- SOCKET.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      socket.on('atualizarSenha', (senha) => {
+        document.getElementById('senha').innerText = senha;
+        playSound();
+      });
+
+      socket.on('repetirSenha', (senha) => {
+        const senhaEl = document.getElementById('senha');
+        senhaEl.innerText = senha;
+
+        // Reforçar o alerta com som e possível destaque visual
+        document.getElementById('audioRepetir').play();
+
+        // Remove e reaplica a classe para reiniciar a animação de piscar
+        senhaEl.classList.remove('blink');
+        void senhaEl.offsetWidth; // força reflow
+        senhaEl.classList.add('blink');
+      });
+
+
+      socket.on('tocarSom', () => {
+        document.getElementById('painelSound').play();
+      });
+
+      function playSound() {
+        document.getElementById("painelSound").play();
+      }
+    </script>
+  </div>
+</body>
+</html>
